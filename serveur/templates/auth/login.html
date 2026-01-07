@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <h1>Connexion</h1>
+    
+    <form method="POST" action="{{ url_for('login') }}">
+        <div>
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" id="username" name="username" required autofocus>
+        </div>
+        
+        <div>
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        
+        <button type="submit">Se connecter</button>
+    </form>
+    
+    <p><a href="{{ url_for('register') }}">Créer un compte</a></p>
+</div>
+{% endblock %}

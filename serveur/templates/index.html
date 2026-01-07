@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil - Authentification{% endblock %}
+
+{% block content %}
+<div class="welcome-container">
+    <h2>Bienvenue{% if username %}, {{ username }}{% endif %}!</h2>
+    <p>Vous êtes connecté avec succès.</p>
+    <p>Votre session est active et votre token JWT est valide.</p>
+</div>
+{% endblock %}
