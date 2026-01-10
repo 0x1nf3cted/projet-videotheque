@@ -12,6 +12,7 @@ services:
     environment:
       - FLASK_ENV=development
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - TMDB_API_KEY=${TMDB_API_KEY}
       - PORT=5001
       - DATA_DIR=/app/data
     networks:

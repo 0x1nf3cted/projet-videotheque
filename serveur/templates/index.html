@@ -1,11 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}Accueil - Authentification{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block content %}
 <div class="welcome-container">
     <h2>Bienvenue{% if username %}, {{ username }}{% endif %}!</h2>
-    <p>Vous êtes connecté avec succès.</p>
-    <p>Votre session est active et votre token JWT est valide.</p>
+    <p>Gérez votre collection de films.</p>
 </div>
+
+{% if films %}
+<div class="films-section">
+    <h3>Derniers films</h3>
+    <div class="films-grid">
+        {% for film in films %}
+        <div class="film-card">
+            {% if film.image_url %}
+            <div class="film-poster">
+                <img src="{{ film.image_url }}" alt="{{ film.titre }}" loading="lazy">
+            </div>
+            {% endif %}
+            <h4><a href="{{ url_for('details_film', id=film.id) }}">{{ film.titre }}</a></h4>
+            <p><strong>Réalisateur:</strong> {{ film.realisateur }}</p>
+            <p><strong>Année:</strong> {{ film.annee }}</p>
+            <p><strong>Genre:</strong> {{ film.genre }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <p><a href="{{ url_for('liste_films') }}">Voir tous les films</a></p>
+</div>
+{% endif %}
 {% endblock %}

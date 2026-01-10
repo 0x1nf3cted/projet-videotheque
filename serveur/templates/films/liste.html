@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Liste des films{% endblock %}
+
+{% block content %}
+<h1>Liste des films</h1>
+
+{% if films %}
+<div class="films-grid">
+    {% for film in films %}
+    <div class="film-card">
+        {% if film.image_url %}
+        <div class="film-poster">
+            <img src="{{ film.image_url }}" alt="{{ film.titre }}" loading="lazy">
+        </div>
+        {% endif %}
+        <h3><a href="{{ url_for('details_film', id=film.id) }}">{{ film.titre }}</a></h3>
+        <p><strong>Réalisateur:</strong> {{ film.realisateur }}</p>
+        <p><strong>Année:</strong> {{ film.annee }}</p>
+        <p><strong>Genre:</strong> {{ film.genre }}</p>
+        <p><strong>Note:</strong> {{ film.note }}/10</p>
+        <div class="film-actions">
+            <a href="{{ url_for('details_film', id=film.id) }}">Détails</a>
+            <a href="{{ url_for('modifier_film', id=film.id) }}">Modifier</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Aucun film dans la collection.</p>
+{% endif %}
+{% endblock %}
+

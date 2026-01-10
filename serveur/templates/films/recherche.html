@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Recherche{% endblock %}
+
+{% block content %}
+<h1>Rechercher un film</h1>
+
+<form method="POST" class="search-form">
+    <div>
+        <label for="q">Rechercher par titre, réalisateur ou genre</label>
+        <input type="text" id="q" name="q" placeholder="Ex: Inception, Christopher Nolan, Science-Fiction..." required>
+    </div>
+    <button type="submit">Rechercher</button>
+</form>
+{% endblock %}
+

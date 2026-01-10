@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Résultats de recherche{% endblock %}
+
+{% block content %}
+<h1>Résultats pour "{{ query }}"</h1>
+
+{% if films %}
+<p>{{ films|length }} film(s) trouvé(s)</p>
+<div class="films-grid">
+    {% for film in films %}
+    <div class="film-card">
+        {% if film.image_url %}
+        <div class="film-poster">
+            <img src="{{ film.image_url }}" alt="{{ film.titre }}" loading="lazy">
+        </div>
+        {% endif %}
+        <h3><a href="{{ url_for('details_film', id=film.id) }}">{{ film.titre }}</a></h3>
+        <p><strong>Réalisateur:</strong> {{ film.realisateur }}</p>
+        <p><strong>Année:</strong> {{ film.annee }}</p>
+        <p><strong>Genre:</strong> {{ film.genre }}</p>
+        <p><strong>Note:</strong> {{ film.note }}/10</p>
+        <div class="film-actions">
+            <a href="{{ url_for('details_film', id=film.id) }}">Détails</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Aucun film trouvé.</p>
+{% endif %}
+
+<p><a href="{{ url_for('recherche_films') }}">Nouvelle recherche</a></p>
+{% endblock %}
+

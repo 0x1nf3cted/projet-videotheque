@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}{{ film.titre }}{% endblock %}
+
+{% block content %}
+<div class="film-details">
+    <div class="film-header">
+        {% if film.image_url %}
+        <div class="film-poster-large">
+            <img src="{{ film.image_url }}" alt="{{ film.titre }}">
+        </div>
+        {% endif %}
+        <div class="film-header-info">
+            <h1>{{ film.titre }}</h1>
+            <div class="film-info">
+        <p><strong>Réalisateur:</strong> {{ film.realisateur }}</p>
+        <p><strong>Année:</strong> {{ film.annee }}</p>
+        <p><strong>Genre:</strong> {{ film.genre }}</p>
+        <p><strong>Format:</strong> {{ film.format }}</p>
+        <p><strong>Durée:</strong> {{ film.duree }} minutes</p>
+        <p><strong>Note:</strong> {{ film.note }}/10</p>
+        {% if film.date_ajout %}
+        <p><strong>Date d'ajout:</strong> {{ film.date_ajout[:10] }}</p>
+        {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    {% if film.resume %}
+    <div class="film-resume">
+        <h3>Résumé</h3>
+        <p>{{ film.resume }}</p>
+    </div>
+    {% endif %}
+    
+    {% if acteurs %}
+    <div class="film-acteurs">
+        <h3>Acteurs</h3>
+        <div class="acteurs-grid">
+            {% for acteur in acteurs %}
+            <div class="acteur-card">
+                {% if acteur.image_url %}
+                <div class="acteur-photo">
+                    <img src="{{ acteur.image_url }}" alt="{{ acteur.prenom }} {{ acteur.nom }}">
+                </div>
+                {% endif %}
+                <div class="acteur-info">
+                    <p><strong>{{ acteur.prenom }} {{ acteur.nom }}</strong></p>
+                    {% if acteur.nationalite %}
+                    <p class="acteur-nationalite">{{ acteur.nationalite }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="film-actions">
+        <a href="{{ url_for('modifier_film', id=film.id) }}">Modifier</a>
+        <form method="POST" action="{{ url_for('supprimer_film', id=film.id) }}" style="display: inline;">
+            <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?')">Supprimer</button>
+        </form>
+        <a href="{{ url_for('liste_films') }}">Retour à la liste</a>
+    </div>
+</div>
+{% endblock %}
+

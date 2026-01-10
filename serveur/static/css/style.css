@@ -211,6 +211,271 @@ form select {
     font-size: 1rem;
 }
 
+/* Films */
+.films-section {
+    margin-top: 40px;
+}
+
+.films-section h3 {
+    margin-bottom: 20px;
+}
+
+.films-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.film-card {
+    background: white;
+    padding: 0;
+    border: 1px solid #ddd;
+    overflow: hidden;
+}
+
+.film-poster {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.film-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.film-card > div:not(.film-poster):not(.film-actions) {
+    padding: 15px 20px;
+}
+
+.film-card h3 {
+    margin-bottom: 10px;
+}
+
+.film-card h3 a {
+    color: #333;
+    text-decoration: none;
+}
+
+.film-card h3 a:hover {
+    text-decoration: underline;
+}
+
+.film-card p {
+    margin: 8px 0;
+    font-size: 0.9rem;
+}
+
+.film-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.film-actions a {
+    margin-right: 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.film-actions a:hover {
+    text-decoration: underline;
+}
+
+.film-actions button {
+    background: #c33;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.film-actions button:hover {
+    background: #a22;
+}
+
+.film-details {
+    background: white;
+    padding: 30px;
+}
+
+.film-header {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.film-poster-large {
+    flex-shrink: 0;
+}
+
+.film-poster-large img {
+    width: 300px;
+    height: auto;
+    border: 1px solid #ddd;
+}
+
+.film-header-info {
+    flex: 1;
+}
+
+.film-acteurs {
+    margin: 30px 0;
+}
+
+.film-acteurs h3 {
+    margin-bottom: 20px;
+}
+
+.acteurs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.acteur-card {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    text-align: center;
+    overflow: hidden;
+}
+
+.acteur-photo {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #eee;
+}
+
+.acteur-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.acteur-info {
+    padding: 10px;
+}
+
+.acteur-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.acteur-nationalite {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.film-info {
+    margin: 20px 0;
+}
+
+.film-info p {
+    margin: 10px 0;
+}
+
+.film-resume {
+    margin: 30px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border-left: 3px solid #333;
+}
+
+.film-resume h3 {
+    margin-bottom: 10px;
+}
+
+.film-form {
+    background: white;
+    padding: 30px;
+    max-width: 600px;
+}
+
+.film-form > div {
+    margin-bottom: 20px;
+}
+
+.film-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.film-form input[type="text"],
+.film-form input[type="number"],
+.film-form select,
+.film-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.film-form textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+.film-form button[type="submit"] {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.film-form button[type="submit"]:hover {
+    background: #555;
+}
+
+.film-form a {
+    color: #333;
+    text-decoration: underline;
+}
+
+.search-form {
+    background: white;
+    padding: 30px;
+    max-width: 600px;
+}
+
+.search-form > div {
+    margin-bottom: 20px;
+}
+
+.search-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.search-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.search-form button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.search-form button:hover {
+    background: #555;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     nav .container {
