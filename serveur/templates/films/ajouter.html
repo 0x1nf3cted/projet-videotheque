@@ -5,7 +5,7 @@
 {% block content %}
 <h1>Ajouter un film</h1>
 
-<form method="POST" class="film-form">
+<form method="POST" class="film-form" enctype="multipart/form-data">
     <div>
         <label for="titre">Titre *</label>
         <input type="text" id="titre" name="titre" required>
@@ -48,6 +48,12 @@
     <div>
         <label for="note">Note (sur 10)</label>
         <input type="number" id="note" name="note" min="0" max="10" step="0.1">
+    </div>
+    
+    <div>
+        <label for="image">Image (JPG, PNG, GIF - max 5MB)</label>
+        <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/gif">
+        <small>Format accepté: JPG, PNG, GIF. Taille maximale: 5MB</small>
     </div>
     
     <button type="submit">Ajouter</button>

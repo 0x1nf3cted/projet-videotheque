@@ -1,13 +1,29 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import requests
 import os
+import uuid
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY')
 API_URL = os.environ.get('API_URL', 'http://localhost:5001')
+API_PUBLIC_URL = os.environ.get('API_PUBLIC_URL', 'http://localhost:5001')   
+IMAGES_DIR = os.environ.get('IMAGES_DIR', '/app/images')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+MAX_FILE_SIZE = 5 * 1024 * 1024   
+
+ 
+os.makedirs(IMAGES_DIR, exist_ok=True)
 
 def is_authenticated():
     return 'token' in session and session.get('token')
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.context_processor
+def inject_api_url():
+    return dict(api_url=API_PUBLIC_URL)
 
 @app.route('/')
 def index():
@@ -61,7 +77,7 @@ def details_film(id):
                 if response_acteurs.status_code == 200:
                     acteurs_data = response_acteurs.json()
                     tous_acteurs = acteurs_data.get('data', [])
-                    # on filtre seulement les acteurs qui sont dans ce film
+ 
                     acteurs = [a for a in tous_acteurs if a.get('id') in acteurs_ids]
             
             return render_template('films/details.html', film=film, acteurs=acteurs)
@@ -79,6 +95,26 @@ def ajouter_film():
     
     if request.method == 'POST':
         try:
+ 
+            image_filename = None
+            if 'image' in request.files:
+                file = request.files['image']
+                if file and file.filename and allowed_file(file.filename):
+                    # on verifie la taille de fichier d'image, la taille max est 5mb
+                    file.seek(0, os.SEEK_END)
+                    file_size = file.tell()
+                    file.seek(0)
+                    
+                    if file_size > MAX_FILE_SIZE:
+                        flash('Le fichier image est trop volumineux (max 5MB)', 'error')
+                        return render_template('films/ajouter.html')
+                    
+ 
+                    ext = file.filename.rsplit('.', 1)[1].lower()
+                    image_filename = f"{uuid.uuid4()}.{ext}"
+                    file_path = os.path.join(IMAGES_DIR, image_filename)
+                    file.save(file_path)
+            
             data = {
                 'titre': request.form.get('titre'),
                 'realisateur': request.form.get('realisateur', ''),
@@ -91,6 +127,10 @@ def ajouter_film():
                 'acteurs': [],
                 'date_ajout': None
             }
+            
+ 
+            if image_filename:
+                data['image'] = image_filename
             
             response = requests.post(f'{API_URL}/api/films', json=data)
             if response.status_code == 201:
@@ -111,6 +151,43 @@ def modifier_film(id):
     
     if request.method == 'POST':
         try:
+ 
+            film_response = requests.get(f'{API_URL}/api/films/{id}')
+            current_film = {}
+            if film_response.status_code == 200:
+                current_film = film_response.json().get('data', {})
+            
+ 
+            image_filename = current_film.get('image')   
+            
+            if 'image' in request.files:
+                file = request.files['image']
+                if file and file.filename and allowed_file(file.filename):
+ 
+                    file.seek(0, os.SEEK_END)
+                    file_size = file.tell()
+                    file.seek(0)
+                    
+                    if file_size > MAX_FILE_SIZE:
+                        flash('Le fichier image est trop volumineux (max 5MB)', 'error')
+                        return redirect(url_for('modifier_film', id=id))
+                    
+ 
+                    old_image = current_film.get('image')
+                    if old_image:
+                        old_image_path = os.path.join(IMAGES_DIR, old_image)
+                        if os.path.exists(old_image_path):
+                            try:
+                                os.remove(old_image_path)
+                            except Exception as e:
+                                print(f'Erreur lors de la suppression de l\'ancienne image: {e}')
+                    
+ 
+                    ext = file.filename.rsplit('.', 1)[1].lower()
+                    image_filename = f"{uuid.uuid4()}.{ext}"
+                    file_path = os.path.join(IMAGES_DIR, image_filename)
+                    file.save(file_path)
+            
             data = {
                 'titre': request.form.get('titre'),
                 'realisateur': request.form.get('realisateur', ''),
@@ -121,6 +198,10 @@ def modifier_film(id):
                 'resume': request.form.get('resume', ''),
                 'note': float(request.form.get('note')) if request.form.get('note') else 0.0
             }
+            
+ 
+            if image_filename:
+                data['image'] = image_filename
             
             response = requests.put(f'{API_URL}/api/films/{id}', json=data)
             if response.status_code == 200:

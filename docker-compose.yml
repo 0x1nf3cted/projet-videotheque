@@ -9,12 +9,14 @@ services:
     volumes:
       - ./API:/app
       - users-data:/app/data
+      - images-data:/app/images
     environment:
       - FLASK_ENV=development
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - TMDB_API_KEY=${TMDB_API_KEY}
       - PORT=5001
       - DATA_DIR=/app/data
+      - IMAGES_DIR=/app/images
     networks:
       - videotheque-network
 
@@ -25,11 +27,14 @@ services:
       - "5000:5000"
     volumes:
       - ./serveur:/app
+      - images-data:/app/images
     environment:
       - FLASK_ENV=development
       - API_URL=http://api:5001
+      - API_PUBLIC_URL=http://localhost:5001
       - SECRET_KEY=${JWT_SECRET_KEY}
       - PORT=5000
+      - IMAGES_DIR=/app/images
     depends_on:
       - api
     networks:
@@ -37,6 +42,7 @@ services:
 
 volumes:
   users-data:
+  images-data:
 
 networks:
   videotheque-network:

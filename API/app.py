@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.films import films_bp
@@ -11,6 +11,16 @@ CORS(app)
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
 if not app.config['JWT_SECRET_KEY']:
     raise ValueError("JWT_SECRET_KEY n'est pas défini")
+
+IMAGES_DIR = os.environ.get('IMAGES_DIR', '/app/images')
+os.makedirs(IMAGES_DIR, exist_ok=True)
+
+# Route pour servir les images
+@app.route('/api/images/<filename>')
+def serve_image(filename):
+    """Sert les images depuis le répertoire d'images"""
+    return send_from_directory(IMAGES_DIR, filename)
+
 app.register_blueprint(auth_bp)
 app.register_blueprint(films_bp)
 app.register_blueprint(acteurs_bp)

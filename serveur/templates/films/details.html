@@ -5,7 +5,11 @@
 {% block content %}
 <div class="film-details">
     <div class="film-header">
-        {% if film.image_url %}
+        {% if film.image %}
+        <div class="film-poster-large">
+            <img src="{{ api_url }}/api/images/{{ film.image }}" alt="{{ film.titre }}">
+        </div>
+        {% elif film.image_url %}
         <div class="film-poster-large">
             <img src="{{ film.image_url }}" alt="{{ film.titre }}">
         </div>

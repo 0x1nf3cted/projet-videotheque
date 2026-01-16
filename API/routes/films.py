@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from utils.json_handler import lire_json, ecrire_json
 import uuid
+import os
 
 films_bp = Blueprint('films', __name__)
 
@@ -55,12 +56,30 @@ def update_film(id):
 @films_bp.route('/api/films/<id>', methods=['DELETE'])
 def delete_film(id):
     films = lire_json('films.json')
-    films_avant = len(films)
-    films = [f for f in films if f.get('id') != id]
     
-    if len(films) == films_avant:
+    # Trouver le film à supprimer pour récupérer l'image
+    film_to_delete = None
+    for film in films:
+        if film.get('id') == id:
+            film_to_delete = film
+            break
+    
+    if film_to_delete is None:
         return jsonify({'success': False, 'error': 'Film non trouvé', 'code': 404}), 404
     
+    # Supprimer l'image associée si elle existe
+    image_filename = film_to_delete.get('image')
+    if image_filename:
+        images_dir = os.environ.get('IMAGES_DIR', '/app/images')
+        image_path = os.path.join(images_dir, image_filename)
+        if os.path.exists(image_path):
+            try:
+                os.remove(image_path)
+            except Exception as e:
+                print(f'Erreur lors de la suppression de l\'image: {e}')
+    
+    # Supprimer le film de la liste
+    films = [f for f in films if f.get('id') != id]
     ecrire_json('films.json', films)
     return jsonify({'success': True, 'message': 'Film supprimé'})
 

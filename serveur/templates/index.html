@@ -14,7 +14,11 @@
     <div class="films-grid">
         {% for film in films %}
         <div class="film-card">
-            {% if film.image_url %}
+            {% if film.image %}
+            <div class="film-poster">
+                <img src="{{ api_url }}/api/images/{{ film.image }}" alt="{{ film.titre }}" loading="lazy">
+            </div>
+            {% elif film.image_url %}
             <div class="film-poster">
                 <img src="{{ film.image_url }}" alt="{{ film.titre }}" loading="lazy">
             </div>
