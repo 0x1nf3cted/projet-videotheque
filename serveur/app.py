@@ -349,6 +349,61 @@ def logout():
     flash('Vous avez été déconnecté', 'info')
     return redirect(url_for('login'))
 
+@app.route('/films/<id>/emprunter', methods=['POST'])
+def emprunter_film(id):
+    if not is_authenticated():
+        return redirect(url_for('login'))
+    
+    try:
+        user_id = session.get('user_id')
+        response = requests.post(f'{API_URL}/api/emprunts', json={'film_id': id, 'user_id': user_id})
+        if response.status_code == 201:
+            flash('Film emprunté avec succès!', 'success')
+        elif response.status_code == 409:
+            flash('Ce film est déjà emprunté', 'error')
+        else:
+            error_data = response.json()
+            flash(error_data.get('error', 'Erreur lors de l\'emprunt'), 'error')
+    except Exception as e:
+        flash(f'Erreur: {str(e)}', 'error')
+    
+    return redirect(url_for('details_film', id=id))
+
+@app.route('/mes-emprunts')
+def mes_emprunts():
+    if not is_authenticated():
+        return redirect(url_for('login'))
+    
+    try:
+        user_id = session.get('user_id')
+        response = requests.get(f'{API_URL}/api/emprunts/{user_id}')
+        if response.status_code == 200:
+            data = response.json()
+            films = data.get('data', [])
+            return render_template('films/mes_emprunts.html', films=films)
+        else:
+            return render_template('films/mes_emprunts.html', films=[])
+    except Exception as e:
+        flash(f'Erreur: {str(e)}', 'error')
+        return render_template('films/mes_emprunts.html', films=[])
+
+@app.route('/films/<id>/retourner', methods=['POST'])
+def retourner_film(id):
+    if not is_authenticated():
+        return redirect(url_for('login'))
+    
+    try:
+        response = requests.delete(f'{API_URL}/api/emprunts/{id}')
+        if response.status_code == 200:
+            flash('Film retourné avec succès!', 'success')
+        else:
+            error_data = response.json()
+            flash(error_data.get('error', 'Erreur lors du retour'), 'error')
+    except Exception as e:
+        flash(f'Erreur: {str(e)}', 'error')
+    
+    return redirect(url_for('mes_emprunts'))
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)

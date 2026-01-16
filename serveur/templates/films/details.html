@@ -6,11 +6,11 @@
 <div class="film-details">
     <div class="film-header">
         {% if film.image %}
-        <div class="film-poster-large">
+        <div class="film-poster-large {% if film.emprunt and film.emprunt.user_id %}emprunte{% endif %}">
             <img src="{{ api_url }}/api/images/{{ film.image }}" alt="{{ film.titre }}">
         </div>
         {% elif film.image_url %}
-        <div class="film-poster-large">
+        <div class="film-poster-large {% if film.emprunt and film.emprunt.user_id %}emprunte{% endif %}">
             <img src="{{ film.image_url }}" alt="{{ film.titre }}">
         </div>
         {% endif %}
@@ -25,6 +25,9 @@
         <p><strong>Note:</strong> {{ film.note }}/10</p>
         {% if film.date_ajout %}
         <p><strong>Date d'ajout:</strong> {{ film.date_ajout[:10] }}</p>
+        {% endif %}
+        {% if film.emprunt and film.emprunt.user_id %}
+        <p><strong>Status:</strong> <span style="color: #c33;">Emprunté</span></p>
         {% endif %}
             </div>
         </div>
@@ -61,6 +64,11 @@
     {% endif %}
     
     <div class="film-actions">
+        {% if not film.emprunt or not film.emprunt.user_id %}
+        <form method="POST" action="{{ url_for('emprunter_film', id=film.id) }}" style="display: inline;">
+            <button type="submit" class="btn btn-primary">Emprunter</button>
+        </form>
+        {% endif %}
         <a href="{{ url_for('modifier_film', id=film.id) }}">Modifier</a>
         <form method="POST" action="{{ url_for('supprimer_film', id=film.id) }}" style="display: inline;">
             <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?')">Supprimer</button>

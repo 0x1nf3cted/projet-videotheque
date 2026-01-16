@@ -15,11 +15,11 @@
         {% for film in films %}
         <div class="film-card">
             {% if film.image %}
-            <div class="film-poster">
+            <div class="film-poster {% if film.emprunt and film.emprunt.user_id %}emprunte{% endif %}">
                 <img src="{{ api_url }}/api/images/{{ film.image }}" alt="{{ film.titre }}" loading="lazy">
             </div>
             {% elif film.image_url %}
-            <div class="film-poster">
+            <div class="film-poster {% if film.emprunt and film.emprunt.user_id %}emprunte{% endif %}">
                 <img src="{{ film.image_url }}" alt="{{ film.titre }}" loading="lazy">
             </div>
             {% endif %}

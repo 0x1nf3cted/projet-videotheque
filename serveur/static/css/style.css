@@ -239,6 +239,7 @@ form select {
     height: 400px;
     overflow: hidden;
     background: #f0f0f0;
+    position: relative;
 }
 
 .film-poster img {
@@ -246,6 +247,35 @@ form select {
     height: 100%;
     object-fit: cover;
 }
+
+.film-poster.emprunte {
+    position: relative;
+}
+
+.film-poster.emprunte::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.film-poster.emprunte::before {
+    content: 'EMPRUNTÉ';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    z-index: 2;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
 
 .film-card > div:not(.film-poster):not(.film-actions) {
     padding: 15px 20px;
@@ -312,12 +342,37 @@ form select {
 
 .film-poster-large {
     flex-shrink: 0;
+    position: relative;
 }
 
 .film-poster-large img {
     width: 300px;
     height: auto;
     border: 1px solid #ddd;
+}
+
+.film-poster-large.emprunte::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.film-poster-large.emprunte::before {
+    content: 'EMPRUNTÉ';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    z-index: 2;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 }
 
 .film-header-info {

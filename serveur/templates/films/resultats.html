@@ -11,11 +11,11 @@
     {% for film in films %}
     <div class="film-card">
         {% if film.image %}
-        <div class="film-poster">
+        <div class="film-poster {% if film.emprunt and film.emprunt.user_id %}emprunte{% endif %}">
             <img src="{{ api_url }}/api/images/{{ film.image }}" alt="{{ film.titre }}" loading="lazy">
         </div>
         {% elif film.image_url %}
-        <div class="film-poster">
+        <div class="film-poster {% if film.emprunt and film.emprunt.user_id %}emprunte{% endif %}">
             <img src="{{ film.image_url }}" alt="{{ film.titre }}" loading="lazy">
         </div>
         {% endif %}
@@ -24,6 +24,9 @@
         <p><strong>Année:</strong> {{ film.annee }}</p>
         <p><strong>Genre:</strong> {{ film.genre }}</p>
         <p><strong>Note:</strong> {{ film.note }}/10</p>
+        {% if film.emprunt and film.emprunt.user_id %}
+        <p><strong>Status:</strong> <span style="color: #c33;">Emprunté</span></p>
+        {% endif %}
         <div class="film-actions">
             <a href="{{ url_for('details_film', id=film.id) }}">Détails</a>
         </div>

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Mes emprunts{% endblock %}
+
+{% block content %}
+<h1>Mes emprunts</h1>
+
+{% if films %}
+<div class="films-grid">
+    {% for film in films %}
+    <div class="film-card">
+        {% if film.image %}
+        <div class="film-poster emprunte">
+            <img src="{{ api_url }}/api/images/{{ film.image }}" alt="{{ film.titre }}" loading="lazy">
+        </div>
+        {% elif film.image_url %}
+        <div class="film-poster emprunte">
+            <img src="{{ film.image_url }}" alt="{{ film.titre }}" loading="lazy">
+        </div>
+        {% endif %}
+        <h3><a href="{{ url_for('details_film', id=film.id) }}">{{ film.titre }}</a></h3>
+        <p><strong>Réalisateur:</strong> {{ film.realisateur }}</p>
+        <p><strong>Année:</strong> {{ film.annee }}</p>
+        <p><strong>Genre:</strong> {{ film.genre }}</p>
+        {% if film.emprunt %}
+        <p><strong>Emprunté le:</strong> {{ film.emprunt.date_emprunt[:10] }}</p>
+        <p><strong>Retour prévu le:</strong> {{ film.emprunt.date_retour[:10] }}</p>
+        <p><strong>Temps restant:</strong> <span class="timer" data-date="{{ film.emprunt.date_retour }}">Calcul...</span></p>
+        {% endif %}
+        <div class="film-actions">
+            <a href="{{ url_for('details_film', id=film.id) }}">Détails</a>
+            <form method="POST" action="{{ url_for('retourner_film', id=film.id) }}" style="display: inline;">
+                <button type="submit" onclick="return confirm('Retourner ce film ?')">Retourner</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Aucun film emprunté.</p>
+{% endif %}
+
+<script>
+function updateTimers() {
+    const timers = document.querySelectorAll('.timer');
+    const now = new Date();
+    
+    timers.forEach(timer => {
+        const returnDate = new Date(timer.getAttribute('data-date'));
+        const diff = returnDate - now;
+        
+        if (diff <= 0) {
+            timer.textContent = 'Expiré';
+            timer.style.color = '#c33';
+            return;
+        }
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        
+        let timeString = '';
+        if (days > 0) {
+            timeString += days + ' jour' + (days > 1 ? 's' : '') + ' ';
+        }
+        if (hours > 0 || days > 0) {
+            timeString += hours + ' heure' + (hours > 1 ? 's' : '') + ' ';
+        }
+        timeString += minutes + ' minute' + (minutes > 1 ? 's' : '');
+        
+        timer.textContent = timeString;
+        
+        if (days === 0) {
+            timer.style.color = '#c33';
+        } else if (days <= 2) {
+            timer.style.color = '#fa0';
+        } else {
+            timer.style.color = '#0a0';
+        }
+    });
+}
+
+updateTimers();
+setInterval(updateTimers, 60000);
+</script>
+{% endblock %}
+

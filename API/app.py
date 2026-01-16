@@ -3,6 +3,7 @@ from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.films import films_bp
 from routes.acteurs import acteurs_bp
+from routes.emprunts import emprunts_bp
 import os
 
 app = Flask(__name__)
@@ -21,9 +22,11 @@ def serve_image(filename):
     """Sert les images depuis le répertoire d'images"""
     return send_from_directory(IMAGES_DIR, filename)
 
+# tous nos route pour l'application 
 app.register_blueprint(auth_bp)
 app.register_blueprint(films_bp)
 app.register_blueprint(acteurs_bp)
+app.register_blueprint(emprunts_bp)
 
 from utils.json_handler import lire_json
 films_existants = lire_json('films.json')
