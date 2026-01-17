@@ -532,6 +532,105 @@ form select {
 }
 
 /* Responsive */
+.btn-secondary {
+    background-color: #666;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #888;
+}
+
+.commentaires-section {
+    margin: 30px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border-left: 3px solid #333;
+}
+
+.commentaires-section h3 {
+    margin-bottom: 15px;
+}
+
+.comment-form {
+    margin-top: 15px;
+}
+
+.comment-form > div {
+    margin-bottom: 15px;
+}
+
+.comment-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.comment-form input[type="number"],
+.comment-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.comment-form textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+.commentaires-list {
+    margin: 30px 0;
+}
+
+.commentaires-list h3 {
+    margin-bottom: 20px;
+}
+
+.commentaires {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.commentaire {
+    background: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-left: 3px solid #666;
+}
+
+.commentaire-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.commentaire-header strong {
+    font-size: 1rem;
+}
+
+.commentaire-header .note {
+    background: #333;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+}
+
+.commentaire-header .date {
+    color: #666;
+    font-size: 0.85rem;
+    margin-left: auto;
+}
+
+.commentaire-text {
+    color: #555;
+    line-height: 1.5;
+    margin-top: 8px;
+}
+
 @media (max-width: 768px) {
     nav .container {
         flex-direction: column;
@@ -545,5 +644,9 @@ form select {
     
     .films-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .film-header {
+        flex-direction: column;
     }
 }

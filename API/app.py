@@ -4,6 +4,8 @@ from routes.auth import auth_bp
 from routes.films import films_bp
 from routes.acteurs import acteurs_bp
 from routes.emprunts import emprunts_bp
+from routes.favoris import favoris_bp
+from routes.commentaires import commentaires_bp
 import os
 
 app = Flask(__name__)
@@ -27,6 +29,8 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(films_bp)
 app.register_blueprint(acteurs_bp)
 app.register_blueprint(emprunts_bp)
+app.register_blueprint(favoris_bp)
+app.register_blueprint(commentaires_bp)
 
 from utils.json_handler import lire_json
 films_existants = lire_json('films.json')

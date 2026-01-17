@@ -69,7 +69,6 @@ def details_film(id):
             data = response.json()
             film = data.get('data', {})
             
-            # on récupère les acteurs du film
             acteurs = []
             acteurs_ids = film.get('acteurs', [])
             if acteurs_ids:
@@ -77,10 +76,23 @@ def details_film(id):
                 if response_acteurs.status_code == 200:
                     acteurs_data = response_acteurs.json()
                     tous_acteurs = acteurs_data.get('data', [])
- 
                     acteurs = [a for a in tous_acteurs if a.get('id') in acteurs_ids]
             
-            return render_template('films/details.html', film=film, acteurs=acteurs)
+            user_id = session.get('user_id')
+            is_favorite = False
+            if user_id:
+                check_response = requests.post(f'{API_URL}/api/favoris/check', json={'film_id': id, 'user_id': user_id})
+                if check_response.status_code == 200:
+                    check_data = check_response.json()
+                    is_favorite = check_data.get('is_favorite', False)
+            
+            commentaires = []
+            comments_response = requests.get(f'{API_URL}/api/commentaires/film/{id}')
+            if comments_response.status_code == 200:
+                comments_data = comments_response.json()
+                commentaires = comments_data.get('data', [])
+            
+            return render_template('films/details.html', film=film, acteurs=acteurs, is_favorite=is_favorite, commentaires=commentaires)
         else:
             flash('Film non trouvé', 'error')
             return redirect(url_for('liste_films'))
@@ -403,6 +415,93 @@ def retourner_film(id):
         flash(f'Erreur: {str(e)}', 'error')
     
     return redirect(url_for('mes_emprunts'))
+
+@app.route('/mes-favoris')
+def mes_favoris():
+    if not is_authenticated():
+        return redirect(url_for('login'))
+    
+    try:
+        user_id = session.get('user_id')
+        response = requests.get(f'{API_URL}/api/favoris/{user_id}')
+        if response.status_code == 200:
+            data = response.json()
+            films = data.get('data', [])
+            return render_template('films/mes_favoris.html', films=films)
+        else:
+            return render_template('films/mes_favoris.html', films=[])
+    except Exception as e:
+        flash(f'Erreur: {str(e)}', 'error')
+        return render_template('films/mes_favoris.html', films=[])
+
+@app.route('/films/<id>/favoris', methods=['POST'])
+def ajouter_favori(id):
+    if not is_authenticated():
+        return redirect(url_for('login'))
+    
+    try:
+        user_id = session.get('user_id')
+        response = requests.post(f'{API_URL}/api/favoris', json={'film_id': id, 'user_id': user_id})
+        if response.status_code == 201:
+            flash('Film ajouté aux favoris!', 'success')
+        elif response.status_code == 409:
+            flash('Ce film est déjà dans vos favoris', 'info')
+        else:
+            error_data = response.json()
+            flash(error_data.get('error', 'Erreur lors de l\'ajout aux favoris'), 'error')
+    except Exception as e:
+        flash(f'Erreur: {str(e)}', 'error')
+    
+    return redirect(url_for('details_film', id=id))
+
+@app.route('/films/<id>/favoris/supprimer', methods=['POST'])
+def supprimer_favori(id):
+    if not is_authenticated():
+        return redirect(url_for('login'))
+    
+    try:
+        user_id = session.get('user_id')
+        response = requests.delete(f'{API_URL}/api/favoris', json={'film_id': id, 'user_id': user_id})
+        if response.status_code == 200:
+            flash('Film retiré des favoris!', 'success')
+        else:
+            error_data = response.json()
+            flash(error_data.get('error', 'Erreur'), 'error')
+    except Exception as e:
+        flash(f'Erreur: {str(e)}', 'error')
+    
+    return redirect(url_for('details_film', id=id))
+
+@app.route('/films/<id>/commenter', methods=['POST'])
+def commenter_film(id):
+    if not is_authenticated():
+        return redirect(url_for('login'))
+    
+    try:
+        user_id = session.get('user_id')
+        note = request.form.get('note')
+        commentaire = request.form.get('commentaire', '')
+        
+        if not note:
+            flash('Veuillez saisir une note', 'error')
+            return redirect(url_for('details_film', id=id))
+        
+        response = requests.post(f'{API_URL}/api/commentaires', json={
+            'film_id': id,
+            'user_id': user_id,
+            'note': float(note),
+            'commentaire': commentaire
+        })
+        
+        if response.status_code == 201:
+            flash('Commentaire ajouté avec succès!', 'success')
+        else:
+            error_data = response.json()
+            flash(error_data.get('error', 'Erreur lors de l\'ajout du commentaire'), 'error')
+    except Exception as e:
+        flash(f'Erreur: {str(e)}', 'error')
+    
+    return redirect(url_for('details_film', id=id))
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

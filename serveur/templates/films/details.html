@@ -69,11 +69,57 @@
             <button type="submit" class="btn btn-primary">Emprunter</button>
         </form>
         {% endif %}
+        {% if is_favorite %}
+        <form method="POST" action="{{ url_for('supprimer_favori', id=film.id) }}" style="display: inline;">
+            <button type="submit" class="btn btn-secondary">Retirer des favoris</button>
+        </form>
+        {% else %}
+        <form method="POST" action="{{ url_for('ajouter_favori', id=film.id) }}" style="display: inline;">
+            <button type="submit" class="btn btn-secondary">Ajouter aux favoris</button>
+        </form>
+        {% endif %}
         <a href="{{ url_for('modifier_film', id=film.id) }}">Modifier</a>
         <form method="POST" action="{{ url_for('supprimer_film', id=film.id) }}" style="display: inline;">
             <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?')">Supprimer</button>
         </form>
         <a href="{{ url_for('liste_films') }}">Retour à la liste</a>
+    </div>
+    
+    <div class="commentaires-section">
+        <h3>Commenter ce film</h3>
+        <form method="POST" action="{{ url_for('commenter_film', id=film.id) }}" class="comment-form">
+            <div>
+                <label for="note">Note (0-10):</label>
+                <input type="number" id="note" name="note" min="0" max="10" step="0.5" required>
+            </div>
+            <div>
+                <label for="commentaire">Commentaire:</label>
+                <textarea id="commentaire" name="commentaire" rows="4" placeholder="Votre avis sur ce film..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Publier</button>
+        </form>
+    </div>
+    
+    <div class="commentaires-list">
+        <h3>Commentaires ({{ commentaires|length }})</h3>
+        {% if commentaires %}
+        <div class="commentaires">
+            {% for commentaire in commentaires %}
+            <div class="commentaire">
+                <div class="commentaire-header">
+                    <strong>{{ commentaire.username }}</strong>
+                    <span class="note">{{ commentaire.note }}/10</span>
+                    <span class="date">{{ commentaire.date[:10] }}</span>
+                </div>
+                {% if commentaire.commentaire %}
+                <p class="commentaire-text">{{ commentaire.commentaire }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>Aucun commentaire pour ce film.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
