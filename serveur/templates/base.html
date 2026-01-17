@@ -14,12 +14,17 @@
                 {% if session.get('username') %}
                 <li><a href="/">Accueil</a></li>
                 <li><a href="/films">Films</a></li>
-                <li><a href="/mes-emprunts">Mes emprunts</a></li>
-                <li><a href="/mes-favoris">Mes favoris</a></li>
                 <li><a href="/films/recherche">Recherche</a></li>
                 <li><a href="/films/ajouter">Ajouter</a></li>
-                <li>{{ session.username }}</li>
-                <li><a href="/logout">Déconnexion</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">{{ session.get('email', session.username) }} ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/mes-emprunts">Mes emprunts</a></li>
+                        <li><a href="/mes-favoris">Mes favoris</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a href="/logout" class="logout-link">Déconnexion</a></li>
+                    </ul>
+                </li>
                 {% else %}
                 <li><a href="/login">Connexion</a></li>
                 <li><a href="/register">Inscription</a></li>

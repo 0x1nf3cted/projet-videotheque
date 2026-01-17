@@ -92,6 +92,7 @@ def login():
         'data': {
             'user_id': user['id'],
             'username': username,
+            'email': user.get('email', ''),
             'token': token
         }
     }), 200

@@ -347,6 +347,7 @@ def login():
                     session['token'] = data['data']['token']
                     session['username'] = data['data']['username']
                     session['user_id'] = data['data']['user_id']
+                    session['email'] = data['data'].get('email', '')
                     flash('Connexion réussie!', 'success')
                     return redirect(url_for('index'))
                 else:

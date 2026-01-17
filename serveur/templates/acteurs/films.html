@@ -32,7 +32,12 @@
         <p><strong>Status:</strong> <span style="color: #c33;">Emprunté</span></p>
         {% endif %}
         <div class="film-actions">
-            <a href="{{ url_for('details_film', id=film.id) }}">Détails</a>
+            <a href="{{ url_for('details_film', id=film.id) }}" class="film-card-action" title="Voir les détails">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </a>
         </div>
     </div>
     {% endfor %}

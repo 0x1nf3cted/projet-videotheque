@@ -28,4 +28,34 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => alert.remove(), 500);
         }, 5000);
     });
+
+    const dropdown = document.querySelector('.dropdown');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    
+    if (dropdown && dropdownMenu) {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        let isOpen = false;
+        
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            isOpen = !isOpen;
+            if (isOpen) {
+                dropdownMenu.classList.add('show');
+            } else {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        dropdownMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target) && isOpen) {
+                dropdownMenu.classList.remove('show');
+                isOpen = false;
+            }
+        });
+    }
 });

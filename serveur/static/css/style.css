@@ -20,10 +20,11 @@ body {
 
 /* Navigation */
 nav {
-    background-color: #2c3e50;
+    background-color: #000000;
     color: white;
     padding: 1rem 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
 }
 
 nav .container {
@@ -34,6 +35,7 @@ nav .container {
 
 nav h1 {
     font-size: 1.5rem;
+    font-weight: 600;
 }
 
 nav h1 a {
@@ -51,10 +53,75 @@ nav ul {
 nav ul li a {
     color: white;
     text-decoration: none;
+    font-weight: 500;
 }
 
 nav ul li a:hover {
     text-decoration: underline;
+}
+
+nav ul li.dropdown {
+    position: relative;
+}
+
+nav ul li .dropdown-toggle {
+    cursor: pointer;
+    user-select: none;
+}
+
+nav ul li .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 8px 0;
+    z-index: 1000;
+    list-style: none;
+    flex-direction: column;
+    gap: 0;
+}
+
+nav ul li.dropdown .dropdown-menu.show {
+    display: flex;
+}
+
+nav ul li .dropdown-menu li {
+    margin: 0;
+    width: 100%;
+}
+
+nav ul li .dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    font-weight: 500;
+}
+
+nav ul li .dropdown-menu li a:hover {
+    background-color: #f0f0f0;
+    text-decoration: none;
+}
+
+nav ul li .dropdown-menu li a.logout-link {
+    color: #dc2626;
+}
+
+nav ul li .dropdown-menu li a.logout-link:hover {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+nav ul li .dropdown-menu .dropdown-divider {
+    height: 1px;
+    margin: 8px 0;
+    background-color: #e0e0e0;
+    border: none;
 }
 
 /* Flash messages */
@@ -157,21 +224,21 @@ nav ul li a:hover {
 }
 
 .btn-primary {
-    background-color: #333;
+    background-color: #3b82f6;
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #555;
+    background-color: #2563eb;
 }
 
 .btn-danger {
-    background-color: #c33;
+    background-color: #ef4444;
     color: white;
 }
 
 .btn-danger:hover {
-    background-color: #a22;
+    background-color: #dc2626;
 }
 
 .welcome-container {
@@ -299,34 +366,236 @@ form select {
     font-size: 0.9rem;
 }
 
-.film-actions {
+.film-card .film-actions {
     margin-top: 15px;
-    padding-top: 15px;
+    padding: 12px 20px;
     border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.film-card .film-actions form {
+    margin: 0;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.film-card .film-actions a {
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.film-card .film-card-action {
+    width: auto;
+    height: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    padding: 4px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.film-card .film-card-action:hover {
+    color: #3b82f6;
+}
+
+.film-card .film-card-action svg {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.film-card .film-card-action-btn {
+    width: auto;
+    height: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    padding: 4px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.film-card .film-card-action-btn:hover {
+    color: #3b82f6;
+}
+
+.film-card .film-card-action-btn svg {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.film-actions {
+    margin-top: 30px;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.film-actions-primary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.film-actions-secondary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.film-actions form {
+    margin: 0;
+    display: inline-block;
+}
+
+.film-actions .btn {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.film-actions .btn svg {
+    flex-shrink: 0;
 }
 
 .film-actions a {
-    margin-right: 15px;
     color: #333;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    padding: 10px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-block;
+    transition: all 0.2s;
+    background-color: white;
 }
 
 .film-actions a:hover {
-    text-decoration: underline;
+    background-color: #f5f5f5;
+    border-color: #999;
+    text-decoration: none;
 }
 
 .film-actions button {
     background: #c33;
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 10px 16px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
 }
 
 .film-actions button:hover {
     background: #a22;
+}
+
+.film-actions button.btn-primary {
+    background-color: #3b82f6;
+}
+
+.film-actions button.btn-primary:hover {
+    background-color: #2563eb;
+}
+
+.film-actions button.btn-secondary {
+    background-color: #262626;
+}
+
+.film-actions button.btn-secondary:hover {
+    background-color: #363636;
+}
+
+.film-actions button.btn-danger {
+    background-color: #ef4444;
+}
+
+.film-actions button.btn-danger:hover {
+    background-color: #dc2626;
+}
+
+.film-actions .btn-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding: 10px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    background-color: white;
+}
+
+.film-actions .btn-link:hover {
+    background-color: #f5f5f5;
+    border-color: #999;
+    text-decoration: none;
+}
+
+.film-actions .btn-link svg {
+    flex-shrink: 0;
+}
+
+.film-actions .btn-icon {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    padding: 0;
+}
+
+.film-actions .btn-icon:hover {
+    background-color: #f5f5f5;
+    border-color: #999;
+}
+
+.film-actions .btn-icon-danger {
+    color: #ef4444;
+    border-color: #fecaca;
+}
+
+.film-actions .btn-icon-danger:hover {
+    background-color: #fee2e2;
+    border-color: #ef4444;
 }
 
 .film-details {
@@ -543,12 +812,12 @@ form select {
 
 /* Responsive */
 .btn-secondary {
-    background-color: #666;
+    background-color: #262626;
     color: white;
 }
 
 .btn-secondary:hover {
-    background-color: #888;
+    background-color: #262626;
 }
 
 .commentaires-section {
@@ -729,6 +998,12 @@ form select {
     nav ul {
         flex-wrap: wrap;
         justify-content: center;
+    }
+
+    nav ul li .dropdown-menu {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
     }
     
     .films-grid {

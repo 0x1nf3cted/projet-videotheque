@@ -28,9 +28,19 @@
         <p><strong>Temps restant:</strong> <span class="timer" data-date="{{ film.emprunt.date_retour }}">Calcul...</span></p>
         {% endif %}
         <div class="film-actions">
-            <a href="{{ url_for('details_film', id=film.id) }}">Détails</a>
+            <a href="{{ url_for('details_film', id=film.id) }}" class="film-card-action" title="Voir les détails">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </a>
             <form method="POST" action="{{ url_for('retourner_film', id=film.id) }}" style="display: inline;">
-                <button type="submit" onclick="return confirm('Retourner ce film ?')">Retourner</button>
+                <button type="submit" class="film-card-action film-card-action-btn" title="Retourner le film" onclick="return confirm('Retourner ce film ?')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12l18 0"></path>
+                        <polyline points="8 7 3 12 8 17"></polyline>
+                    </svg>
+                </button>
             </form>
         </div>
     </div>
