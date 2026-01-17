@@ -5,7 +5,111 @@
 {% block content %}
 <h1>Liste des films</h1>
 
+<div class="filters-toggle-section">
+    <button type="button" id="toggleFilters" class="btn btn-secondary">Afficher les filtres</button>
+    {% if current_filters %}
+    {% set has_active_filters = current_filters.get('genre') or current_filters.get('annee_min') or current_filters.get('annee_max') or current_filters.get('note_min') or current_filters.get('format') %}
+    {% if has_active_filters %}
+    <span class="active-filters-indicator">Filtres actifs</span>
+    {% endif %}
+    {% endif %}
+</div>
+
+<div class="filters-section" id="filtersSection" style="display: none;">
+    <form method="GET" action="{{ url_for('liste_films') }}" class="filters-form">
+        <div class="filter-group">
+            <label for="genre">Genre:</label>
+            <select id="genre" name="genre">
+                <option value="">Tous les genres</option>
+                {% for genre in genres %}
+                <option value="{{ genre }}" {% if current_filters.get('genre') == genre %}selected{% endif %}>
+                    {{ genre }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="annee_min">Année min:</label>
+            <input type="number" id="annee_min" name="annee_min" 
+                   value="{{ current_filters.get('annee_min', '') }}" min="1900" max="2100">
+        </div>
+        
+        <div class="filter-group">
+            <label for="annee_max">Année max:</label>
+            <input type="number" id="annee_max" name="annee_max" 
+                   value="{{ current_filters.get('annee_max', '') }}" min="1900" max="2100">
+        </div>
+        
+        <div class="filter-group">
+            <label for="note_min">Note min:</label>
+            <input type="number" id="note_min" name="note_min" step="0.1" 
+                   value="{{ current_filters.get('note_min', '') }}" min="0" max="10">
+        </div>
+        
+        <div class="filter-group">
+            <label for="format">Format:</label>
+            <select id="format" name="format">
+                <option value="">Tous les formats</option>
+                <option value="numérique" {% if current_filters.get('format') == 'numérique' %}selected{% endif %}>Numérique</option>
+                <option value="physique" {% if current_filters.get('format') == 'physique' %}selected{% endif %}>Physique</option>
+                <option value="dvd" {% if current_filters.get('format') == 'dvd' %}selected{% endif %}>DVD</option>
+                <option value="blu-ray" {% if current_filters.get('format') == 'blu-ray' %}selected{% endif %}>Blu-ray</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="sort">Trier par:</label>
+            <select id="sort" name="sort">
+                <option value="titre" {% if current_filters.get('sort', 'titre') == 'titre' %}selected{% endif %}>Titre</option>
+                <option value="annee" {% if current_filters.get('sort') == 'annee' %}selected{% endif %}>Année</option>
+                <option value="note" {% if current_filters.get('sort') == 'note' %}selected{% endif %}>Note</option>
+                <option value="duree" {% if current_filters.get('sort') == 'duree' %}selected{% endif %}>Durée</option>
+                <option value="realisateur" {% if current_filters.get('sort') == 'realisateur' %}selected{% endif %}>Réalisateur</option>
+                <option value="date_ajout" {% if current_filters.get('sort') == 'date_ajout' %}selected{% endif %}>Date d'ajout</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="order">Ordre:</label>
+            <select id="order" name="order">
+                <option value="asc" {% if current_filters.get('order', 'asc') == 'asc' %}selected{% endif %}>Croissant</option>
+                <option value="desc" {% if current_filters.get('order') == 'desc' %}selected{% endif %}>Décroissant</option>
+            </select>
+        </div>
+        
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+            <a href="{{ url_for('liste_films') }}" class="btn btn-secondary">Réinitialiser</a>
+        </div>
+    </form>
+</div>
+
+<script>
+document.getElementById('toggleFilters').addEventListener('click', function() {
+    const filtersSection = document.getElementById('filtersSection');
+    const toggleButton = document.getElementById('toggleFilters');
+    
+    if (filtersSection.style.display === 'none') {
+        filtersSection.style.display = 'block';
+        toggleButton.textContent = 'Masquer les filtres';
+    } else {
+        filtersSection.style.display = 'none';
+        toggleButton.textContent = 'Afficher les filtres';
+    }
+});
+
+{% if current_filters %}
+{% set has_active_filters = current_filters.get('genre') or current_filters.get('annee_min') or current_filters.get('annee_max') or current_filters.get('note_min') or current_filters.get('format') %}
+{% if has_active_filters %}
+document.getElementById('filtersSection').style.display = 'block';
+document.getElementById('toggleFilters').textContent = 'Masquer les filtres';
+{% endif %}
+{% endif %}
+</script>
+
 {% if films %}
+<p class="films-count">{{ films|length }} film(s) trouvé(s)</p>
 <div class="films-grid">
     {% for film in films %}
     <div class="film-card">

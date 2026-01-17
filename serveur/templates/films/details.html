@@ -63,6 +63,38 @@
     </div>
     {% endif %}
     
+    {% if recommendations %}
+    <div class="recommendations-section">
+        <h3>Films recommandés</h3>
+        <div class="films-grid">
+            {% for rec in recommendations %}
+            <div class="film-card">
+                {% if rec.image %}
+                <div class="film-poster {% if rec.emprunt and rec.emprunt.user_id %}emprunte{% endif %}">
+                    <img src="{{ api_url }}/api/images/{{ rec.image }}" alt="{{ rec.titre }}" loading="lazy">
+                </div>
+                {% elif rec.image_url %}
+                <div class="film-poster {% if rec.emprunt and rec.emprunt.user_id %}emprunte{% endif %}">
+                    <img src="{{ rec.image_url }}" alt="{{ rec.titre }}" loading="lazy">
+                </div>
+                {% endif %}
+                <h3><a href="{{ url_for('details_film', id=rec.id) }}">{{ rec.titre }}</a></h3>
+                <p><strong>Réalisateur:</strong> {{ rec.realisateur }}</p>
+                <p><strong>Année:</strong> {{ rec.annee }}</p>
+                <p><strong>Genre:</strong> {{ rec.genre }}</p>
+                <p><strong>Note:</strong> {{ rec.note }}/10</p>
+                {% if rec.match_score %}
+                <p class="match-score">Pertinence: {{ rec.match_score }}</p>
+                {% endif %}
+                <div class="film-actions">
+                    <a href="{{ url_for('details_film', id=rec.id) }}">Voir détails</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
     <div class="film-actions">
         {% if not film.emprunt or not film.emprunt.user_id %}
         <form method="POST" action="{{ url_for('emprunter_film', id=film.id) }}" style="display: inline;">

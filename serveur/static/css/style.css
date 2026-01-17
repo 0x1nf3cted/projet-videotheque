@@ -641,6 +641,85 @@ form select {
     margin-top: 8px;
 }
 
+.filters-toggle-section {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.active-filters-indicator {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+}
+
+.filters-section {
+    background: white;
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filters-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-weight: 500;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.filter-group input,
+.filter-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.2);
+}
+
+.filter-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.filter-actions .btn {
+    padding: 10px 20px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.films-count {
+    margin: 20px 0;
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 500;
+}
+
 @media (max-width: 768px) {
     nav .container {
         flex-direction: column;

@@ -46,17 +46,47 @@ def liste_films():
         return redirect(url_for('login'))
     
     try:
-        response = requests.get(f'{API_URL}/api/films')
+        params = {}
+        if request.args.get('genre'):
+            params['genre'] = request.args.get('genre')
+        if request.args.get('annee_min'):
+            params['annee_min'] = request.args.get('annee_min')
+        if request.args.get('annee_max'):
+            params['annee_max'] = request.args.get('annee_max')
+        if request.args.get('note_min'):
+            params['note_min'] = request.args.get('note_min')
+        if request.args.get('format'):
+            params['format'] = request.args.get('format')
+        if request.args.get('sort'):
+            params['sort'] = request.args.get('sort')
+        if request.args.get('order'):
+            params['order'] = request.args.get('order')
+        
+        response = requests.get(f'{API_URL}/api/films', params=params)
         if response.status_code == 200:
             data = response.json()
             films = data.get('data', [])
-            return render_template('films/liste.html', films=films)
+            
+            all_films_response = requests.get(f'{API_URL}/api/films')
+            genres = set()
+            if all_films_response.status_code == 200:
+                all_films_data = all_films_response.json()
+                all_films = all_films_data.get('data', [])
+                for film in all_films:
+                    if film.get('genre'):
+                        genres.add(film.get('genre'))
+            genres = sorted(genres)
+            
+            return render_template('films/liste.html', films=films, genres=genres, 
+                                 current_filters=request.args)
         else:
             flash('Erreur lors de la récupération des films', 'error')
-            return render_template('films/liste.html', films=[])
+            return render_template('films/liste.html', films=[], genres=[], 
+                                 current_filters={})
     except Exception as e:
         flash(f'Erreur: {str(e)}', 'error')
-        return render_template('films/liste.html', films=[])
+        return render_template('films/liste.html', films=[], genres=[], 
+                             current_filters={})
 
 @app.route('/films/<id>')
 def details_film(id):
@@ -92,7 +122,13 @@ def details_film(id):
                 comments_data = comments_response.json()
                 commentaires = comments_data.get('data', [])
             
-            return render_template('films/details.html', film=film, acteurs=acteurs, is_favorite=is_favorite, commentaires=commentaires)
+            recommendations = []
+            rec_response = requests.get(f'{API_URL}/api/films/{id}/recommendations', params={'limit': 6})
+            if rec_response.status_code == 200:
+                rec_data = rec_response.json()
+                recommendations = rec_data.get('data', [])
+            
+            return render_template('films/details.html', film=film, acteurs=acteurs, is_favorite=is_favorite, commentaires=commentaires, recommendations=recommendations)
         else:
             flash('Film non trouvé', 'error')
             return redirect(url_for('liste_films'))
