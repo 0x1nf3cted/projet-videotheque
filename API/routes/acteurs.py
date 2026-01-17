@@ -38,3 +38,16 @@ def create_acteur():
     
     return jsonify({'success': True, 'data': data}), 201
 
+@acteurs_bp.route('/api/acteurs/<id>/films', methods=['GET'])
+def films_acteur(id):
+    acteurs = lire_json('acteurs.json')
+    acteur = next((a for a in acteurs if a.get('id') == id), None)
+    
+    if not acteur:
+        return jsonify({'success': False, 'error': 'Acteur non trouvé', 'code': 404}), 404
+    
+    films = lire_json('films.json')
+    films_acteur = [f for f in films if id in f.get('acteurs', [])]
+    
+    return jsonify({'success': True, 'data': films_acteur, 'acteur': acteur})
+

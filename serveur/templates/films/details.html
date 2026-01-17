@@ -52,7 +52,7 @@
                 </div>
                 {% endif %}
                 <div class="acteur-info">
-                    <p><strong>{{ acteur.prenom }} {{ acteur.nom }}</strong></p>
+                    <p><strong><a href="{{ url_for('films_acteur', id=acteur.id) }}">{{ acteur.prenom }} {{ acteur.nom }}</a></strong></p>
                     {% if acteur.nationalite %}
                     <p class="acteur-nationalite">{{ acteur.nationalite }}</p>
                     {% endif %}

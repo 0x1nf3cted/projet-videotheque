@@ -422,6 +422,16 @@ form select {
     font-size: 0.9rem;
 }
 
+.acteur-info p strong a {
+    color: #333;
+    text-decoration: none;
+}
+
+.acteur-info p strong a:hover {
+    color: #555;
+    text-decoration: underline;
+}
+
 .acteur-nationalite {
     color: #666;
     font-size: 0.85rem;

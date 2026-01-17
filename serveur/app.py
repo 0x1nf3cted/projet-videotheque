@@ -503,6 +503,25 @@ def commenter_film(id):
     
     return redirect(url_for('details_film', id=id))
 
+@app.route('/acteurs/<id>/films')
+def films_acteur(id):
+    if not is_authenticated():
+        return redirect(url_for('login'))
+    
+    try:
+        response = requests.get(f'{API_URL}/api/acteurs/{id}/films')
+        if response.status_code == 200:
+            data = response.json()
+            films = data.get('data', [])
+            acteur = data.get('acteur', {})
+            return render_template('acteurs/films.html', films=films, acteur=acteur)
+        else:
+            flash('Acteur non trouvé', 'error')
+            return redirect(url_for('liste_films'))
+    except Exception as e:
+        flash(f'Erreur: {str(e)}', 'error')
+        return redirect(url_for('liste_films'))
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)

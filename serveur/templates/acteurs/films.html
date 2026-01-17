@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Films de {{ acteur.prenom }} {{ acteur.nom }}{% endblock %}
+
+{% block content %}
+<h1>Films avec {{ acteur.prenom }} {{ acteur.nom }}</h1>
+
+{% if acteur.nationalite %}
+<p><strong>Nationalité:</strong> {{ acteur.nationalite }}</p>
+{% endif %}
+
+{% if films %}
+<p>{{ films|length }} film(s) trouvé(s)</p>
+<div class="films-grid">
+    {% for film in films %}
+    <div class="film-card">
+        {% if film.image %}
+        <div class="film-poster {% if film.emprunt and film.emprunt.user_id %}emprunte{% endif %}">
+            <img src="{{ api_url }}/api/images/{{ film.image }}" alt="{{ film.titre }}" loading="lazy">
+        </div>
+        {% elif film.image_url %}
+        <div class="film-poster {% if film.emprunt and film.emprunt.user_id %}emprunte{% endif %}">
+            <img src="{{ film.image_url }}" alt="{{ film.titre }}" loading="lazy">
+        </div>
+        {% endif %}
+        <h3><a href="{{ url_for('details_film', id=film.id) }}">{{ film.titre }}</a></h3>
+        <p><strong>Réalisateur:</strong> {{ film.realisateur }}</p>
+        <p><strong>Année:</strong> {{ film.annee }}</p>
+        <p><strong>Genre:</strong> {{ film.genre }}</p>
+        <p><strong>Note:</strong> {{ film.note }}/10</p>
+        {% if film.emprunt and film.emprunt.user_id %}
+        <p><strong>Status:</strong> <span style="color: #c33;">Emprunté</span></p>
+        {% endif %}
+        <div class="film-actions">
+            <a href="{{ url_for('details_film', id=film.id) }}">Détails</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Aucun film trouvé pour cet acteur.</p>
+{% endif %}
+
+<p><a href="{{ url_for('liste_films') }}">Retour à la liste des films</a></p>
+{% endblock %}
+
